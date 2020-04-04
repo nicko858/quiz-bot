@@ -7,6 +7,11 @@ Look how it works:
 
 ![](https://raw.githubusercontent.com/nicko858/quiz-bot/gifs/vk_demo.gif)
 
+To test bots, visit the folowing links:
+
+- [vk](https://vk.com/club193206427)
+- [telegam](https://t.me/Nicko85232Bot)
+
 ## Prerequisites
 
 ### Telegram instructions
