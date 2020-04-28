@@ -15,6 +15,9 @@ from common_tools import (
     is_answer_correct,
 )
 
+
+logger = logging.getLogger(__file__)
+
 INITIAL = 'Привет! Я бот для викторин! Чтобы продолжить, нажми «Новый вопрос»'
 
 SUCCESS_MESSAGE = '''\
@@ -57,7 +60,6 @@ def set_vk_bot_logging(log_level, bot_token, chat_id):
         'warning': logging.WARN,
     }
     tg_bot = telegram.Bot(token=bot_token)
-    logger = logging.getLogger(__file__)
     logger.setLevel(log_levels[log_level])
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',

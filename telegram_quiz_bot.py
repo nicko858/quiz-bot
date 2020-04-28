@@ -21,6 +21,8 @@ from common_tools import (
 from os import getenv
 
 
+logger = logging.getLogger(__file__)
+
 NEW_QUESTION, ANSWER = range(2)
 
 SUCCESS_MESSAGE = '''\
@@ -56,7 +58,6 @@ def set_quiz_bot_logging(log_level, bot_token, chat_id):
         'warning': logging.WARN,
     }
     tg_bot = telegram.Bot(token=bot_token)
-    logger = logging.getLogger(__file__)
     logger.setLevel(log_levels[log_level])
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
