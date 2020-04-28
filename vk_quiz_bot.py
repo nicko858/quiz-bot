@@ -136,7 +136,7 @@ def handle_quiz(vk_session, vk):
                         random_id=random.randint(1, 1000),
                         )
         except Exception as error:
-            logger.error(error, exc_info=True)
+            logger.exception(error)
 
 
 if __name__ == '__main__':
