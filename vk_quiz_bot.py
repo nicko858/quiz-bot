@@ -14,6 +14,7 @@ from common_tools import (
     parse_args,
     is_answer_correct,
 )
+from functools import partial
 
 
 logger = logging.getLogger(__file__)
@@ -94,21 +95,12 @@ def handle_quiz(vk_session, vk):
             longpoll = VkLongPoll(vk_session)
             for event in longpoll.listen():
                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                    keyboard = make_keyboard()
-                    if event.text == '/start':
-                        response = INITIAL
+                    if event.text in ("/start", "/stop"):
+                        response = vk_handle_options[event.text]["response"]
+                        keyboard = vk_handle_options[event.text]["keyboard"]
                         vk.messages.send(
                             user_id=event.user_id,
-                            keyboard=keyboard.get_keyboard(),
-                            message=response,
-                            random_id=random.randint(1, 1000),
-                        )
-                        continue
-                    elif event.text == '/stop':
-                        response = GOODBY
-                        vk.messages.send(
-                            user_id=event.user_id,
-                            keyboard=keyboard.get_empty_keyboard(),
+                            keyboard=keyboard,
                             message=response,
                             random_id=random.randint(1, 1000),
                         )
@@ -117,7 +109,7 @@ def handle_quiz(vk_session, vk):
                         question = random.choice(list(quiz_data.keys()))
                         response = question
                         quiz_db.set(event.user_id, question)
-                    elif event.text == 'Сдаться':
+                    elif event.text == "Сдаться":
                         try:
                             question = quiz_db.get(event.user_id)
                             answer = quiz_data[question]
@@ -156,4 +148,15 @@ if __name__ == '__main__':
     logger.info('Bot {0} has started!'.format(__file__))
     vk_session = vk_api.VkApi(token=vk_token)
     vk = vk_session.get_api()
+    keyboard = make_keyboard()
+    vk_handle_options = {
+        "/start": {
+            "response": INITIAL,
+            "keyboard": keyboard.get_keyboard()
+            },
+        "/stop": {
+            "response": GOODBY,
+            "keyboard": keyboard.get_empty_keyboard()
+            },
+        }
     handle_quiz(vk_session, vk)
