@@ -5,15 +5,15 @@ from os import getenv
 from dotenv import load_dotenv
 import logging
 import telegram
-import re
-import redis
-from os import access
-from os import path
-from os import R_OK
 from textwrap import dedent
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
-import argparse
-from argparse import ArgumentTypeError
+from common_tools import (
+    connect_to_quiz_db,
+    read_quiz_file,
+    parse_quiz_data,
+    parse_args,
+    is_answer_correct,
+)
 
 INITIAL = 'Привет! Я бот для викторин! Чтобы продолжить, нажми «Новый вопрос»'
 
@@ -35,68 +35,6 @@ SURRENDER_MESSAGE = '''\
     '''
 
 GOODBY = 'Спасибо за участие в викторине!'
-
-
-def check_file_path(file_path):
-    read_ok = access(path.dirname(file_path), R_OK)
-    error_msg = "Access error or directory {0} doesn't exist!"
-    if not read_ok:
-        raise ArgumentTypeError(error_msg.format(file_path))
-    elif path.isdir(file_path):
-        raise ArgumentTypeError("The '{0}' is not a file!".format(file_path))
-    return file_path
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('quiz_file_path', type=check_file_path)
-    return parser.parse_args()
-
-
-def connect_to_quiz_db(db_host, db_port, db_passwd):
-    quiz_db = redis.Redis(
-        host=db_host,
-        password=db_passwd,
-        port=db_port,
-        db=0,
-        decode_responses=True,
-        )
-    return quiz_db
-
-
-def is_answer_correct(answer, question):
-    answer_body, *_ = re.split(r'\.|\(', answer)
-    return answer_body.lower() in quiz_data[question].lower()
-
-
-def read_quiz_file(file_path):
-    with open(file_path, 'r', encoding='KOI8-R') as file_handler:
-        content = file_handler.read().split('\n\n')
-    return content
-
-
-def format_record(raw_record, type='question'):
-    params = {
-        'question': r'Вопрос \d+:',
-        'answer': r'Ответ:',
-    }
-    split_record = re.split(
-        params[type],
-        raw_record.replace('\n', ' '))
-    _, formatted_record = split_record
-    return formatted_record.lstrip()
-
-
-def parse_quiz_data(raw_quiz_data):
-    quiz_data = {}
-    step_to_answer = 1
-    for idx, record in enumerate(raw_quiz_data):
-        if 'Вопрос' in record:
-            question = format_record(record)
-            raw_answer = raw_quiz_data[idx + step_to_answer]
-            answer = format_record(raw_answer, type='answer')
-            quiz_data[question] = answer
-    return quiz_data
 
 
 class TelegramLogsHandler(logging.Handler):
@@ -186,7 +124,7 @@ def handle_quiz(vk_session, vk):
                         except KeyError:
                             response = NO_QUESTION
                     else:
-                        if is_answer_correct(event.text, question):
+                        if is_answer_correct(event.text, question, quiz_data):
                             response = dedent(SUCCESS_MESSAGE)
                         else:
                             response = FAIL_MESSAGE
