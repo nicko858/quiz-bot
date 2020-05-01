@@ -40,9 +40,9 @@ To test bots, visit the folowing links:
 Python3 should be already installed.
 
 ```bash
-    git clone https://github.com/nicko858/quiz-bot
-    cd quiz-bot
-    pip install -r requirements.txt
+git clone https://github.com/nicko858/quiz-bot
+cd quiz-bot
+pip install -r requirements.txt
 ```
 
 - Create file `.env` in the script directory
@@ -50,12 +50,12 @@ Python3 should be already installed.
 - Edit your `.env` - file:
 
   ```bash
-     TELEGRAM_BOT_TOKEN=<your bot token>
-     LOGGER_CHAT_ID=<your chat id>
-     DB_HOST=<redis database host>
-     DB_PORT=<redis database port>
-     DB_PASSWD=<redis database password>
-     VK_TOKEN=<your vk-group token>
+  TELEGRAM_BOT_TOKEN=<your bot token>
+  LOGGER_CHAT_ID=<your chat id>
+  DB_HOST=<redis database host>
+  DB_PORT=<redis database port>
+  DB_PASSWD=<redis database password>
+  VK_TOKEN=<your vk-group token>
   ```
 
 ## How to run local
@@ -63,26 +63,22 @@ Python3 should be already installed.
 At first, you need a quiz source file for your bot with the following content as example:
 
 ```txt
-    Вопрос 1:
-    С одним советским туристом в Марселе произошел такой случай. Спустившись
-    из своего номера на первый этаж, он вспомнил, что забыл закрутить кран в
-    ванной. Когда он поднялся, вода уже затопила комнату. Он вызвал
-    горничную, та попросила его обождать внизу. В страхе он ожидал расплаты
-    за свою оплошность. Но администрация его не ругала, а, напротив,
-    извинилась сама перед ним. За что?
-
-    Ответ:
-    За то, что не объяснила ему правила пользования кранами.
-
-
-    Вопрос 2:
-    В своем первоначально узком значении это слово произошло от французского
-    глагола, означающего "бить". Сейчас же оно может означать любое
-    объединение в систему нескольких однотипных элементов. Назовите это
-    слово.
-
-    Ответ:
-    Батарея (от battre).
+Вопрос 1:
+С одним советским туристом в Марселе произошел такой случай. Спустившись
+из своего номера на первый этаж, он вспомнил, что забыл закрутить кран в
+ванной. Когда он поднялся, вода уже затопила комнату. Он вызвал
+горничную, та попросила его обождать внизу. В страхе он ожидал расплаты
+за свою оплошность. Но администрация его не ругала, а, напротив,
+извинилась сама перед ним. За что?
+Ответ:
+За то, что не объяснила ему правила пользования кранами.
+Вопрос 2:
+В своем первоначально узком значении это слово произошло от французского
+глагола, означающего "бить". Сейчас же оно может означать любое
+объединение в систему нескольких однотипных элементов. Назовите это
+слово.
+Ответ:
+Батарея (от battre).
 ```
 
 Please note that:  
@@ -96,17 +92,17 @@ For demo purposes, you'll find `demo_quiz_source.txt` in this repo. So, you may 
 Now we are ready to start our bots:
 
 ```bash
-    nohup python3 vk_quiz_bot.py ./demo_quiz_source.txt &
-    nohup python3 telegram_quiz_bot.py ./demo_quiz_source.txt &
+nohup python3 vk_quiz_bot.py ./demo_quiz_source.txt &
+nohup python3 telegram_quiz_bot.py ./demo_quiz_source.txt &
 ```
 
 To stop bots:
 
 ```bash
-    ps -fe | grep vk_quiz_bot.py
-    ps -fe | grep telegram_quiz_bot.py
-    kill -9 <vk_quiz_bot PID>
-    kill -9 <telegram_quiz_bot PID>
+ps -fe | grep vk_quiz_bot.py
+ps -fe | grep telegram_quiz_bot.py
+kill -9 <vk_quiz_bot PID>
+kill -9 <telegram_quiz_bot PID>
 ```
 
 ## How to deploy on heroku
@@ -115,8 +111,8 @@ To stop bots:
 - Make sure, that you have `Procfile` in the repo root and it has this inside:
 
   ```bash
-    bot-quiz-tg: python3 telegram_quiz_bot.py ./demo_quiz_source.txt
-    bot-quiz-vk: python3 vk_quiz_bot.py ./demo_quiz_source.txt  
+  bot-quiz-tg: python3 telegram_quiz_bot.py ./demo_quiz_source.txt
+  bot-quiz-vk: python3 vk_quiz_bot.py ./demo_quiz_source.txt  
   ```
 
 - Create account on [heroku](https://id.heroku.com) or use existing
@@ -126,20 +122,20 @@ To stop bots:
 - After successfull deploy, go to `Settings` and create environment variables in `Config Vars` section:
 
   ```bash
-     TELEGRAM_BOT_TOKEN: <your bot token>
-     LOGGER_CHAT_ID: <your chat id>
-     DB_HOST: <redis database host>
-     DB_PORT: <redis database port>
-     DB_PASSWD: <redis database password>
-     VK_TOKEN: <your vk-group token>
+  TELEGRAM_BOT_TOKEN: <your bot token>
+  LOGGER_CHAT_ID: <your chat id>
+  DB_HOST: <redis database host>
+  DB_PORT: <redis database port>
+  DB_PASSWD: <redis database password>
+  VK_TOKEN: <your vk-group token>
   ```
 
 - Go to `Resources` and make sure that you have this in `Free Dynos` - section:
 
-    ```bash
-    bot-quiz-tg: python3 telegram_quiz_bot.py ./demo_quiz_source.txt
-    bot-quiz-vk: python3 vk_quiz_bot.py ./demo_quiz_source.txt
-    ```
+  ```bash
+  bot-quiz-tg: python3 telegram_quiz_bot.py ./demo_quiz_source.txt
+  bot-quiz-vk: python3 vk_quiz_bot.py ./demo_quiz_source.txt
+  ```
 
 - Run bots by clicking pencil-icon
 
