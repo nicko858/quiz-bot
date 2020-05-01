@@ -88,7 +88,7 @@ def make_keyboard():
     return keyboard
 
 
-def handle_quiz(vk_session, vk):
+def handle_quiz(vk_session, vk, vk_handle_options):
     while True:
         try:
             longpoll = VkLongPoll(vk_session)
@@ -158,4 +158,4 @@ if __name__ == '__main__':
             "keyboard": keyboard.get_empty_keyboard()
             },
         }
-    handle_quiz(vk_session, vk)
+    handle_quiz(vk_session, vk, vk_handle_options)
