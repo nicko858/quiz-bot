@@ -65,7 +65,6 @@ def set_quiz_bot_logging(log_level, bot_token, chat_id):
     telegram_handler = TelegramLogsHandler(tg_bot, chat_id)
     telegram_handler.setFormatter(formatter)
     logger.addHandler(telegram_handler)
-    return logger
 
 
 def handle_new_question_request(bot, update):
@@ -132,7 +131,7 @@ if __name__ == '__main__':
     quiz_raw_data = read_quiz_file(quiz_file_path)
     quiz_data = parse_quiz_data(quiz_raw_data)
     updater = Updater(telebot_token)
-    logger = set_quiz_bot_logging('info', telebot_token, logger_chat_id)
+    set_quiz_bot_logging('info', telebot_token, logger_chat_id)
     logger.info('Bot {0} has started!'.format(__file__))
     dp = updater.dispatcher
     conv_handler = ConversationHandler(

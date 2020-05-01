@@ -68,7 +68,6 @@ def set_vk_bot_logging(log_level, bot_token, chat_id):
     telegram_handler = TelegramLogsHandler(tg_bot, chat_id)
     telegram_handler.setFormatter(formatter)
     logger.addHandler(telegram_handler)
-    return logger
 
 
 def make_keyboard():
@@ -144,7 +143,7 @@ if __name__ == '__main__':
     quiz_file_path = cli_args.quiz_file_path
     quiz_raw_data = read_quiz_file(quiz_file_path)
     quiz_data = parse_quiz_data(quiz_raw_data)
-    logger = set_vk_bot_logging('debug', telebot_token, logger_chat_id)
+    set_vk_bot_logging('debug', telebot_token, logger_chat_id)
     logger.info('Bot {0} has started!'.format(__file__))
     vk_session = vk_api.VkApi(token=vk_token)
     vk = vk_session.get_api()
