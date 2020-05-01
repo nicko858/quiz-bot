@@ -71,14 +71,14 @@ def handle_new_question_request(bot, update):
     user = update.message.chat.username
     question = random.choice(list(quiz_data.keys()))
     response = question
-    quiz_db.set(user, question)
+    quiz_db.set("{0}-{1}".format("tg", user), question)
     update.message.reply_text(text=response)
     return ANSWER
 
 
 def handle_solution_attempt(bot, update):
     user = update.message.chat.username
-    question = quiz_db.get(user)
+    question = quiz_db.get("{0}-{1}".format("tg", user))
     if is_answer_correct(update.message.text, question, quiz_data):
         response = dedent(SUCCESS_MESSAGE)
         state = NEW_QUESTION
@@ -91,7 +91,7 @@ def handle_solution_attempt(bot, update):
 
 def handle_surrender(bot, update):
     user = update.message.chat.username
-    question = quiz_db.get(user)
+    question = quiz_db.get("{0}-{1}".format("tg", user))
     answer = quiz_data[question]
     response = dedent(SURRENDER_MESSAGE.format(answer))
     update.message.reply_text(text=response)

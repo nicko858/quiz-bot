@@ -14,7 +14,6 @@ from common_tools import (
     parse_args,
     is_answer_correct,
 )
-from functools import partial
 
 
 logger = logging.getLogger(__file__)
@@ -107,12 +106,21 @@ def handle_quiz(vk_session, vk, vk_handle_options):
                     elif event.text == "Новый вопрос":
                         question = random.choice(list(quiz_data.keys()))
                         response = question
-                        quiz_db.set(event.user_id, question)
+                        quiz_db.set(
+                            "{0}-{1}".format("vk", event.user_id),
+                            question,
+                            )
                     elif event.text == "Сдаться":
                         try:
-                            question = quiz_db.get(event.user_id)
+                            question = quiz_db.get("{0}-{1}".format(
+                                "vk",
+                                event.user_id,
+                                ))
                             answer = quiz_data[question]
-                            quiz_db.delete(event.user_id)
+                            quiz_db.delete("{0}-{1}".format(
+                                "vk",
+                                event.user_id
+                                ))
                             response = dedent(SURRENDER_MESSAGE.format(answer))
                         except KeyError:
                             response = NO_QUESTION
