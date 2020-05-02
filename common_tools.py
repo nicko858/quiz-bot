@@ -54,9 +54,9 @@ def parse_args():
 
 def is_answer_correct(answer, question, quiz_data):
     answer_body, *_ = re.split(r'\.|\(', answer)
-    for word in answer_body.lower().split():
-        if word in quiz_data[question].lower().split():
-            return True
+    splitted_answer = set(answer_body.lower().split())
+    splitted_correct_answer = set(quiz_data[question].lower().split())
+    return bool(splitted_answer.intersection(splitted_correct_answer))
 
 
 def format_record(raw_record, type='question'):
