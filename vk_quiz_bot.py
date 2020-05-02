@@ -107,18 +107,16 @@ def handle_quiz(vk_session, vk, vk_handle_options):
                         question = random.choice(list(quiz_data.keys()))
                         response = question
                         quiz_db.set(
-                            "{0}-{1}".format("vk", event.user_id),
+                            "vk-{0}".format(event.user_id),
                             question,
                             )
                     elif event.text == "Сдаться":
                         try:
-                            question = quiz_db.get("{0}-{1}".format(
-                                "vk",
-                                event.user_id,
+                            question = quiz_db.get("vk-{0}".format(
+                                event.user_id
                                 ))
                             answer = quiz_data[question]
-                            quiz_db.delete("{0}-{1}".format(
-                                "vk",
+                            quiz_db.delete("vk-{0}".format(
                                 event.user_id
                                 ))
                             response = dedent(SURRENDER_MESSAGE.format(answer))
